@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react"
+import "./App.css"
+import userLocation from "./utils/userLocation"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+type Types = {
+  lat: number,
+  lng: number
 }
 
-export default App;
+class App extends Component<{}, Types>{
+
+  state = {
+    lat: 0,
+    lng: 0
+  }
+
+  componentDidMount() {
+    userLocation.getUserLocation()
+    this.getCoordiates()
+  }
+
+  getCoordiates = () => {
+    if (userLocation.coordinates.lat && userLocation.coordinates.lng) {
+      this.setState({ lat: userLocation.coordinates.lat, lng: userLocation.coordinates.lng })
+    }
+    setTimeout(() => {
+      userLocation.getUserLocation()
+      this.getCoordiates()
+    }, 500)
+    // console.log(this.state)
+  }
+
+  render() {
+
+    return (
+      <div className="App">
+        <p>{`lat: ${this.state.lat}`}</p>
+        <p>{`lng: ${this.state.lng}`}</p>
+        <div id="snackbar">snacks</div>
+      </div>
+    )
+  }
+}
+
+export default App
