@@ -15,7 +15,6 @@ class App extends Component<{}, Types>{
   }
 
   componentDidMount() {
-    userLocation.getUserLocation()
     this.getCoordiates()
   }
 
